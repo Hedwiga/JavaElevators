@@ -9,7 +9,7 @@ public class Elevator implements IElevator {
     private IElevatorStrategy strategy;
     private ElevatorConfiguration configuration;
     private ArrayList<Passenger> passengers;
-    private ArrayList<Integer> currentRoute;
+    private LinkedHashSet<Integer> currentRoute;
     private ArrayList<Integer> callingQueue;
 
     private Timer onFloorTimer;
@@ -24,9 +24,11 @@ public class Elevator implements IElevator {
         this.currentFloor = 1;
         this.direction = ElevatorDirection.UP;
         this.onFloorTimer = new Timer();
-        this.state = new MovingState(this);
+        this.state = new StoppedState(this);
         this.strategy = configuration.strategy;
         this.passengers = new ArrayList<>();
+        this.callingQueue = new ArrayList<>();
+        this.currentRoute = new LinkedHashSet<>();
     }
 
     public void setOnFloorCallback(TimerTask onFloorCallback) {
@@ -37,9 +39,6 @@ public class Elevator implements IElevator {
     public void startElevatorMovement() {
         System.out.println(configuration.speed);
         onFloorTimer.schedule(onFloorCallback, configuration.speed, configuration.speed);
-    }
-
-    public void moveTo(int targetFloor) {
     }
 
     public int changeFloor() {
@@ -58,7 +57,7 @@ public class Elevator implements IElevator {
             var passenger = i.next();
             if(passenger.getFloorTarget() == currentFloor) {
                 i.remove();
-                System.out.println("Passenger goes: " + passenger);
+//                System.out.println("Passenger goes: " + passenger);
             }
         }
     }
@@ -66,14 +65,33 @@ public class Elevator implements IElevator {
     @Override
     public void call(int floor) {
         callingQueue.add(floor);
+        state.onCall();
+    }
+
+    public void buildRoute() {
         currentRoute = strategy.buildRoute(this);
+    }
+
+    public boolean popFromRoute() {
+        currentRoute.remove(currentFloor);
+        return currentRoute.isEmpty();
+    }
+
+    public void defineDirection() {
+        var currentRouteList = new ArrayList<>(currentRoute);
+        if(currentRouteList.get(0) > currentFloor) {
+            direction = ElevatorDirection.UP;
+        } else if(currentRouteList.get(0) < currentFloor){
+            direction = ElevatorDirection.DOWN;
+        }
+        System.out.println("Direction: " + direction);
     }
 
     @Override
     public boolean addPassenger(Passenger passenger) {
         if(isAbleToAddPassenger(passenger)) {
             this.passengers.add(passenger);
-            System.out.println("Added passenger: " + passenger.getFloorTarget());
+//            System.out.println("Added passenger: " + passenger.getFloorTarget());
             return true;
         } else {
 

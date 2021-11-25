@@ -1,7 +1,8 @@
 package com.company;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 
 public interface IElevatorStrategy {
-    public ArrayList<Integer> buildRoute(IElevator floor);
+    public LinkedHashSet<Integer> buildRoute(IElevator floor);
 }

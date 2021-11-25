@@ -1,12 +1,13 @@
 package com.company;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 
 public class PreemtiveStrategy implements IElevatorStrategy {
 
     @Override
-    public ArrayList<Integer> buildRoute(IElevator elevator) {
-        var route = new ArrayList<Integer>();
+    public LinkedHashSet<Integer> buildRoute(IElevator elevator) {
+        var route = new LinkedHashSet<Integer>();
         return route;
     }
 }

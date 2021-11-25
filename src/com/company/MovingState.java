@@ -10,6 +10,12 @@ public class MovingState extends ElevatorState {
     @Override
     public void onFloor(IFloor floor) {
         // To safely remove
+        boolean isEmpty = elevator.popFromRoute();
+        if(isEmpty) {
+            elevator.changeState(new StoppedState(elevator));
+        }
+        elevator.buildRoute();
+        elevator.defineDirection();
         Iterator<Passenger> i = floor.getPassengers().iterator();
         while (i.hasNext()) {
             var passenger = i.next();
@@ -20,12 +26,17 @@ public class MovingState extends ElevatorState {
     }
 
     @Override
-    public void onMove() {
+    public void onCall() {
 
     }
 
     @Override
     public void onStatus() {
 
+    }
+
+    @Override
+    public String getState() {
+        return "Moving";
     }
 }

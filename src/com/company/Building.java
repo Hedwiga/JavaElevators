@@ -60,7 +60,7 @@ public class Building {
             public void run() {
                 var floorIndex = elevator.changeFloor();
                 var currentFloor= floors.get(floorIndex);
-                System.out.println("Passengers on floor[" + floorIndex + "] = " + currentFloor.passengers.size());
+//                System.out.println("Passengers on floor[" + floorIndex + "] = " + currentFloor.passengers.size());
                 elevator.removePassengers();
                 elevator.getState().onFloor(currentFloor);
             }
