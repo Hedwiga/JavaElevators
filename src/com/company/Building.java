@@ -38,6 +38,11 @@ public class Building {
                     buildingConfiguration.getElevatorConfiguration().get(i));
             elevator.setOnFloorCallback(createElevatorOnFloorCallback(elevator));
             elevators.add(elevator);
+
+            Thread elevatorThread = new Thread(elevator);
+            elevatorThread.start();
+
+            System.out.format("%s is alive.%n", elevatorThread.getName());
         }
     }
 

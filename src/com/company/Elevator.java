@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.*;
 
-public class Elevator implements IElevator {
+public class Elevator implements IElevator, Runnable {
     private int id;
     private ElevatorState state;
     private ElevatorDirection direction;
@@ -137,5 +137,11 @@ public class Elevator implements IElevator {
 
     public ElevatorDirection getDirection() {
         return this.direction;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Running [" +
+                Thread.currentThread().getName() + "].");
     }
 }
